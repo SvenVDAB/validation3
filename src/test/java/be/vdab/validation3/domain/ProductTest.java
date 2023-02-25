@@ -9,8 +9,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.math.BigDecimal;
+import java.util.Collections;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 public class ProductTest {
     private Validator validator;
@@ -26,20 +28,27 @@ public class ProductTest {
 
     @Test
     void correctProduct() {
-        assertThat(validator.validate(product)).isEmpty();
+        assertThat(validator.validate(product)).isEqualTo(Collections.EMPTY_SET);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"-1", "-1.234", "12345678"})
     void verkeerdeAankoopPrijzen(String prijs) {
         product.setAankoopPrijs(new BigDecimal(prijs));
-        assertThat(validator.validate(product)).isNotEmpty();
+        assertThat(validator.validate(product)).isNotEqualTo(Collections.EMPTY_SET);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"-10", "10.234", "12345678"})
     void verkeerdeVerkoopPrijzen(String prijs) {
         product.setVerkoopPrijs(new BigDecimal(prijs));
-        assertThat(validator.validate(product)).isNotEmpty();
+        assertThat(validator.validate(product)).isNotEqualTo(Collections.EMPTY_SET);
+    }
+
+    @Test
+    void aankoopPrijs10EnVerkoopPrijs1IsVerkeerd() {
+        product.setAankoopPrijs(BigDecimal.TEN);
+        product.setVerkoopPrijs(BigDecimal.ONE);
+        assertThat(validator.validate(product)).isNotEqualTo(Collections.EMPTY_SET);
     }
 }

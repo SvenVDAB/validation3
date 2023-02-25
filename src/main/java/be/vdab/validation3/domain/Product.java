@@ -1,15 +1,15 @@
 package be.vdab.validation3.domain;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.PositiveOrZero;
+import be.vdab.validation3.constraints.Prijs;
+import be.vdab.validation3.constraints.VerkoopPrijsAankoopPrijs;
+
 import java.math.BigDecimal;
 
+@VerkoopPrijsAankoopPrijs
 public class Product {
-    @PositiveOrZero
-    @Digits(integer = 7, fraction = 2)
+    @Prijs
     private BigDecimal aankoopPrijs;
-    @PositiveOrZero
-    @Digits(integer = 7, fraction = 2)
+    @Prijs
     private BigDecimal verkoopPrijs;
 
     public BigDecimal getAankoopPrijs() {
